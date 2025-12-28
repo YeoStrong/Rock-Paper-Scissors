@@ -1,30 +1,17 @@
-// 1. Create a new function named getHumanChoice
 function getComputerChoice() {
-
-  const randomNumber = Math.floor(Math.random() *3)
-  let computerChoice = ""
+  const randomNumber = Math.floor(Math.random() * 3);
+  let computerChoice = "";
   if (randomNumber == 0) {
-    computerChoice = 'Rock';
+    computerChoice = "Rock";
+    return computerChoice;
+  } else if (randomNumber == 1) {
+    computerChoice = "Paper";
+    return computerChoice;
+  } else {
+    computerChoice = "Scissors";
     return computerChoice;
   }
-  else if (randomNumber == 1) {
-    computerChoice = 'Paper';
-    return computerChoice;
-  }
-  else {
-    computerChoice = 'Scissors';
-    return computerChoice;
-  } 
 }
-// console.log(getComputerChoice());
-
-// 2. Write the code so that getHumanChoice will return one of the valid choices depending on what the user inputs.
-function getHumanChoice() {
-  let str = prompt("What is your pick?");
-  const humanChoice = str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-  return humanChoice;
-}
-// console.log(getHumanChoice());
 
 let humanScore = 0;
 let computerScore = 0;
@@ -33,58 +20,66 @@ function playRound(humanChoice, computerChoice) {
   let humanNum;
   let computerNum;
 
-  if (humanChoice == 'Rock') {
+  if (humanChoice == "Rock") {
     humanNum = 0;
-  } else if (humanChoice == 'Paper') {
+  } else if (humanChoice == "Paper") {
     humanNum = 1;
-  } else if (humanChoice == 'Scissors') {
+  } else if (humanChoice == "Scissors") {
     humanNum = 2;
   }
 
-  if (computerChoice == 'Rock') {
+  if (computerChoice == "Rock") {
     computerNum = 0;
-  } else if (computerChoice == 'Paper') {
+  } else if (computerChoice == "Paper") {
     computerNum = 1;
-  } else if (computerChoice == 'Scissors') {
+  } else if (computerChoice == "Scissors") {
     computerNum = 2;
   }
 
   const diff = humanNum - computerNum;
-  const remainderResult = ( diff % 3 + 3) % 3;
+  const remainderResult = ((diff % 3) + 3) % 3;
+
+  let roundResultMessage = "";
 
   if (remainderResult == 0) {
-    return 'Draw!'
+    roundResultMessage = "Draw!";
   } else if (remainderResult == 1) {
     humanScore += 1;
-    return 'You won! ' + humanChoice + ' beats ' + computerChoice;
-  }
-  else if (remainderResult == 2) {
+    roundResultMessage = "You won! " + humanChoice + " beats " + computerChoice;
+  } else if (remainderResult == 2) {
     computerScore += 1;
-    return 'You lose! ' + computerChoice + ' beats ' + humanChoice;
+    roundResultMessage =
+      "You lose! " + computerChoice + " beats " + humanChoice;
+  }
+
+  messageDiv.innerHTML = `<h3>${roundResultMessage}</h3>`;
+  scoreDisplay.textContent = `Current Score: You ${humanScore} - Computer ${computerScore}`;
+
+  if (humanScore == 5 || computerScore == 5) {
+    messageDiv.innerHTML = `<h3>GAME OVER! THE WINNER IS ${
+      humanScore == 5 ? "YOU!" : "COMPUTER!"
+    }</h3>`;
+
+    buttons.forEach((button) => {
+      button.disabled = true;
+    });
   }
 }
 
-function playGame() {
-  for (let i = 0; i < 5; i++) {
-    const humanChoice = getHumanChoice();
-    const computerChoice = getComputerChoice();
+const buttons = document.querySelectorAll("button");
 
-    const roundResult = playRound(humanChoice, computerChoice);
+buttons.forEach((button) => {
+  const humanSelection = button.id.charAt(0).toUpperCase() + button.id.slice(1);
+  button.innerText = humanSelection;
+  button.addEventListener("click", () => {
+    playRound(humanSelection, getComputerChoice());
+  });
+});
 
-    console.log(`Round ${i + 1}: ${roundResult}`);
-    console.log(`Current Score: You ${humanScore} - Computer ${computerScore}`);
-  }
-  
-  console.log('\n--- Final Game Result ---');
-  if (humanScore > computerScore) {
-    console.log('You won the match!');
-  }
-  else if (humanScore < computerScore) {
-    console.log('You lost the match');
-  } else {
-    console.log('DRAWWWWWWWWW!');
-  }
-}
+const resultDiv = document.querySelector("#result");
+const messageDiv = document.querySelector("#round-message");
+const scoreDisplay = document.querySelector("#score-display");
+scoreDisplay.textContent = `Current Score: You ${humanScore} - Computer ${computerScore}`;
 
 // rock = 0
 // paper = 1
@@ -93,7 +88,7 @@ function playGame() {
 // rock
 // 0 - 0 = 0 draw
 // 0 - 1 = -1 lose
-// 0 - 2 = -2 win 
+// 0 - 2 = -2 win
 // paper
 // 1 - 0 = 1 win
 // 1 - 1 = 0 draw
