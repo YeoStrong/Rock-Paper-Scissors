@@ -8,4 +8,6 @@ Play game with buttons!
 Just push buttons and see result!
 One who reaches 5 point first will win.
 
-# Built with JavaScript, HTML
+## [Live Demo](https://yeostrong.github.io/Rock-Paper-Scissors/)
+
+### Built with JavaScript, HTML
